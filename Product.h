@@ -14,13 +14,15 @@ public:
 	static int _amount;
 	Product();
 	Product(string name, float price);
-	string get_name();
-	float get_price();
-	int get_no();
+    string getName();
+    float getPrice();
+    int getNo();
 	bool getAvailability();
 	void setName(string name);
 	void setPrice(int price);
 	void changeAvailability();
-	void showProduct();
+    void printInfo();
+
+//    virtual void printDetailedInfo() = 0;
 };
 

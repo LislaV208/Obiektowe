@@ -4,6 +4,8 @@
 #include <conio.h>
 #include <iostream>
 
+#include <algorithm>
+
 using std::cout;
 using std::string;
 
@@ -55,10 +57,16 @@ void Program::showArchivalOrders()
 		cout.width(10);
 		cout << "Wartosc\n";
 
-		for (int i = 0; i < Order::_amount; i++)
-		{
-			if (!(_order_list[i].ifActive())) _order_list[i].showOrder();
-		}
+//		for (int i = 0; i < Order::_amount; i++)
+//		{
+//			if (!(_order_list[i].isActive())) _order_list[i].showOrder();
+//		}
+
+        std::vector<Order> archivalOrders = database.getArchivalOrders();
+
+        std::for_each(archivalOrders.begin(), archivalOrders.end(), [](const Order& order) {
+            order.showOrder();
+        });
 
 		showOrderListMenuOperations();
 
@@ -102,7 +110,16 @@ void Program::addProduct()
 	cout << "Podaj cene produktu: ";
 	std::cin >> price;
 	std::cin.ignore();
-	_product_list.push_back(Product(name, price));
+
+    //zamiast tego niżej
+    if (!database.addProduct(new Product(name, price)))
+    {
+        cout << "Produkt o podanej nazwie znajduje sie juz w bazie\n";
+        cout << "Wcisnij dowolny klawisz, aby powrocic";
+        getch();
+    }
+//    _product_list.push_back(Product(name, price));
+
 	productMenuOperations();
 }
 
@@ -112,10 +129,16 @@ void Program::showProductList()
 	system("cls");
 	userInterface.showProductListHeaders();
 
-	for (int i = 0; i < Product::_amount; i++)
-	{
-		_product_list[i].showProduct();
-	}
+//	for (int i = 0; i < Product::_amount; i++)
+//	{
+//        _product_list[i].printInfo();
+//	}
+
+    std::vector<Product*> products = database.getAllProducts();
+
+    std::for_each(products.begin(), products.end(), [](Product* product){
+        product->printInfo();
+    });
 
 	cout << "1. POWROT";
 	char c;
@@ -150,30 +173,17 @@ void Program::findProduct()
 		system("cls");
 		cout << "Podaj nazwe produktu: ";
 		getline(std::cin, name);
-		no = 0;
+        product = database.getProduct(name);
 		break;
 	case '2':
 		system("cls");
 		cout << "Podaj numer produktu: ";
 		std::cin >> no;
-		name = "";
+        product = database.getProduct(no);
 		break;
 	}
 
-
-	bool ifFind = false;
-	for (int i = 0; i < Product::_amount; i++)
-	{
-		if (_product_list[i].get_name() == name || _product_list[i].get_no() == no)
-		{
-			product = &_product_list[i];
-			ifFind = true;
-			break;
-		}
-	}
-
-
-	if (ifFind == false)
+    if (product == nullptr)
 	{
 		system("cls");
 		cout << "Nie znaleziono pasujacego produktu\n";
@@ -189,7 +199,7 @@ void Program::findProduct()
 	{
 		system("cls");
 		userInterface.showProductListHeaders();
-		product->showProduct();
+        product->printInfo();
 		findProductMenuOperations(product);
 	}
 }
@@ -212,7 +222,7 @@ void Program::orderMenuOperations()
 		showArchivalOrders();
 		break;
 	case '3':
-		Program::addOrder();
+        addOrder();
 		break;
 	case '4':
 		runProgram();
@@ -258,9 +268,11 @@ void Program::addOrder()
 	case '1':
 		cout << "\n\n";
 		userInterface.showProductListHeaders();
+
+        // ZADANIE: przerób
 		for (int i = 0; i < Product::_amount; i++)
 		{
-			_product_list[i].showProduct();
+            _product_list[i].printInfo();
 		}
 		break;
 	case '2':
@@ -275,6 +287,7 @@ void Program::addOrder()
 		order->addItem(product);
 	}
 
+    // ZADANIE: przerób na database
 	_order_list.push_back(*order);
 	orderMenuOperations();
 }
@@ -333,7 +346,7 @@ void Program::showOrderList()
 
 	for (int i = 0; i < Order::_amount; i++)
 	{
-		if(_order_list[i].ifActive()) _order_list[i].showOrder();
+        if(_order_list[i].isActive()) _order_list[i].showOrder();
 	}
 
 	showOrderListMenuOperations();
@@ -394,7 +407,7 @@ void Program::editProduct(Product *product)
 		{
 		case '1':
 			system("cls");
-			cout << "Obecna nazwa: " << product->get_name();
+            cout << "Obecna nazwa: " << product->getName();
 			cout << "\nNowa nazwa: ";
 			std::getline(std::cin, name);
 			product->setName(name);
@@ -402,7 +415,7 @@ void Program::editProduct(Product *product)
 
 		case '2':
 			system("cls");
-			cout << "Obecna cena: " << product->get_price();
+            cout << "Obecna cena: " << product->getPrice();
 			cout << "\nNowa cena: ";
 			std::cin >> price;
 			product->setPrice(price);

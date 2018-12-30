@@ -22,9 +22,9 @@ public:
 	float getValue();
 	void addItem(Product item);
 	void showProducts();
-	void showOrder();
+    void showOrder() const;
 	void showDetails();
 	void makeArchival();
-	bool ifActive();
+    bool isActive() const;
 };
 

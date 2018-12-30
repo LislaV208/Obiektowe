@@ -28,7 +28,7 @@ float Order::getValue()
 void Order::addItem(Product item)
 {
 	_products.push_back(item);
-	_value += item.get_price();
+    _value += item.getPrice();
 }
 
 void Order::showProducts()
@@ -41,13 +41,13 @@ void Order::showProducts()
 	for (int i = 0; i < _products.size(); i++)
 	{
 		cout.width(20);
-		cout << _products[i].get_name();
+        cout << _products[i].getName();
 		cout.width(10);
-		cout << _products[i].get_price();
+        cout << _products[i].getPrice();
 	}
 }
 
-void Order::showOrder()
+void Order::showOrder() const
 {
 	cout.width(10);
 	cout << _no;
@@ -71,7 +71,7 @@ void Order::showDetails()
 	Program::UserInterface::showProductListHeaders();
 	for (int i = 0; i < _products.size(); i++)
 	{
-		_products[i].showProduct();
+		_products[i].printInfo();
 	}
 	cout << "\nLACZNA WARTOSC ZAMOWIENIA: " << _value;
 }
@@ -81,7 +81,7 @@ void Order::makeArchival()
 	_active = false;
 }
 
-bool Order::ifActive()
+bool Order::isActive() const
 {
 	return _active;
 }

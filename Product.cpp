@@ -18,7 +18,7 @@ Product::Product(string name, float price) :
 	_amount += 1;
 }
 
-string Product::get_name()
+string Product::getName()
 {
 	return _name;
 }
@@ -28,7 +28,7 @@ void Product::setName(string name)
 	_name = name;
 }
 
-float Product::get_price()
+float Product::getPrice()
 {
 	return _price;
 }
@@ -38,7 +38,7 @@ void Product::setPrice(int price)
 	_price = price;
 }
 
-int Product::get_no()
+int Product::getNo()
 {
 	return _no;
 }
@@ -53,7 +53,7 @@ void Product::changeAvailability()
 	_availability = !_availability;
 }
 
-void Product::showProduct()
+void Product::printInfo()
 {
 	cout.width(8);
 	cout << _no;

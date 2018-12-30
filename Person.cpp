@@ -18,22 +18,22 @@ Person::~Person()
 {
 }
 
-string Person::getFirstName()
+string Person::getFirstName() const
 {
 	return _firstName;
 }
 
-string Person::getLastName()
+string Person::getLastName() const
 {
 	return _lastName;
 }
 
-int Person::getPhoneNumber()
+int Person::getPhoneNumber() const
 {
 	return _phoneNumber;
 }
 
-void Person::showPerson()
+void Person::showPerson() const
 {
 	cout.width(20);
 	cout << _firstName;

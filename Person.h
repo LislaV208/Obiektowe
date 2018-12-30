@@ -13,8 +13,8 @@ public:
 	Person();
 	Person(string firstName, string lastName, int phoneNumber);
 	~Person();
-	string getFirstName();
-	string getLastName();
-	int getPhoneNumber();
-	void showPerson();
+	string getFirstName() const;
+	string getLastName() const;
+    int getPhoneNumber() const;
+    void showPerson() const;
 };
