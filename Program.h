@@ -4,7 +4,7 @@
 
 
 class Program
-{
+{    
 	void showActiveOrders();
 	void showArchivalOrders();
 	void menuService();
@@ -18,6 +18,8 @@ class Program
 	void showOrderListMenuOperations();
 	void findProductMenuOperations(Product *product);
 	void editProduct(Product *product);
+
+    int getUserOptionChoice(int optionsNumber) const;
 
 public:
     Database database;

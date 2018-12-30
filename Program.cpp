@@ -5,10 +5,10 @@
 #include <iostream>
 
 #include <algorithm>
+#include <exception>
 
 using std::cout;
 using std::string;
-
 
 
 void Program::runProgram()
@@ -20,22 +20,18 @@ void Program::runProgram()
 
 void Program::menuService()
 {
-	char c;
-	do
+    switch (getUserOptionChoice(3))
 	{
-		c = _getch();
-	} while (c != '1' && c != '2' && c != '3');
-
-	switch (c)
-	{
-	case '1':
+    case 1:
 		productMenuOperations();
 		break;
-	case '2':
+    case 2:
 		orderMenuOperations();
 		break;
-	case '3':
+    case 3:
 		break;
+    default:
+        throw std::invalid_argument("getUserOptionChoice - niepoprawna wartosc argumentu");
 	}
 }
 
@@ -76,26 +72,23 @@ void Program::showArchivalOrders()
 void Program::productMenuOperations()
 {
 	userInterface.showProductMenu();
-	char c;
-	do
-	{
-		c = _getch();
-	} while (c != '1' && c != '2' && c != '3' && c != '4');
 
-	switch (c)
+    switch (getUserOptionChoice(4))
 	{
-	case '1':
+    case 1:
 		showProductList();
 		break;
-	case '2':
-		addProduct();
+    case 2:
+        addProduct();
 		break;
-	case '3':
+    case 3:
 		findProduct();
 		break;
-	case '4':
+    case 4:
 		runProgram();
 		break;
+    default:
+        throw std::invalid_argument("getUserOptionChoice - niepoprawna wartosc argumentu");
 	}
 }
 
@@ -141,12 +134,15 @@ void Program::showProductList()
     });
 
 	cout << "1. POWROT";
-	char c;
-	do
-	{
-		c = _getch();
-	} while (c != '1');
-	productMenuOperations();
+
+    switch (getUserOptionChoice(1))
+    {
+    case 1:
+        productMenuOperations();
+        break;
+    default:
+        throw std::invalid_argument("getUserOptionChoice - niepoprawna wartosc argumentu");
+    }
 }
 
 
@@ -160,27 +156,22 @@ void Program::findProduct()
 	string name;
 	int no;
 
-	char c;
-	do
+    switch (getUserOptionChoice(2))
 	{
-		c = _getch();
-	} while (c != '1'&& c != '2');
-
-	system("cls");
-	switch (c)
-	{
-	case '1':
+    case 1:
 		system("cls");
 		cout << "Podaj nazwe produktu: ";
 		getline(std::cin, name);
         product = database.getProduct(name);
 		break;
-	case '2':
+    case 2:
 		system("cls");
 		cout << "Podaj numer produktu: ";
 		std::cin >> no;
         product = database.getProduct(no);
 		break;
+    default:
+        throw std::invalid_argument("getUserOptionChoice - niepoprawna wartosc argumentu");
 	}
 
     if (product == nullptr)
@@ -188,12 +179,16 @@ void Program::findProduct()
 		system("cls");
 		cout << "Nie znaleziono pasujacego produktu\n";
 		cout << "1. POWROT";
-		char c;
-		do
-		{
-			c = _getch();
-		} while (c != '1');
-		productMenuOperations();
+
+        switch (getUserOptionChoice(1))
+        {
+        case 1:
+            productMenuOperations();
+            break;
+        default:
+            throw std::invalid_argument("getUserOptionChoice - niepoprawna wartosc argumentu");
+        }
+
 	}
 	else
 	{
@@ -207,26 +202,23 @@ void Program::findProduct()
 void Program::orderMenuOperations()
 {
 	userInterface.showOrderMenu();
-	char c;
-	do
-	{
-		c = _getch();
-	} while (c != '1' && c != '2' && c != '3' && c != '4');
 
-	switch (c)
+    switch (getUserOptionChoice(4))
 	{
-	case '1':
+    case 1:
 		showActiveOrders();
 		break;
-	case '2':
+    case 2:
 		showArchivalOrders();
 		break;
-	case '3':
+    case 3:
         addOrder();
 		break;
-	case '4':
+    case 4:
 		runProgram();
 		break;
+    default:
+        throw std::invalid_argument("getUserOptionChoice - niepoprawna wartosc argumentu");
 	}
 }
 
@@ -257,15 +249,10 @@ void Program::addOrder()
 	cout << "\nCzy chcesz wyswietlic liste wszystkich produktow?\n"
 		<< "1. Tak\n"
 		<< "2. Nie\n";
-	char c;
-	do
-	{
-		c = _getch();
-	} while (c != '1' && c != '2');
 
-	switch (c)
+    switch (getUserOptionChoice(2))
 	{
-	case '1':
+    case 1:
 		cout << "\n\n";
 		userInterface.showProductListHeaders();
 
@@ -275,8 +262,10 @@ void Program::addOrder()
             _product_list[i].printInfo();
 		}
 		break;
-	case '2':
+    case 2:
 		break;
+    default:
+        throw std::invalid_argument("getUserOptionChoice - niepoprawna wartosc argumentu");
 	}
 
 	for (int i = 0; i < numberOfProducts; i++)
@@ -295,15 +284,10 @@ void Program::addOrder()
 void Program::showOrderListMenuOperations()
 {
 	userInterface.showOrderListMenu();
-	char c;
-	do
-	{
-		c = _getch();
-	} while (c != '1' && c != '2');
 
-	switch (c)
+    switch (getUserOptionChoice(2))
 	{
-	case '1':
+    case 1:
 		int no;
 		cout << "\nPodaj numer zamowienia ";
 		std::cin >> no;
@@ -311,25 +295,26 @@ void Program::showOrderListMenuOperations()
 
 		cout << "\n1. PRZENIES DO ARCHIWUM"
 			<< "\n2. POWROT";
-		char c;
-		do
+
+        switch (getUserOptionChoice(2))
 		{
-			c = _getch();
-		} while (c != '1' && c != '2');
-		switch (c)
-		{
-		case '1':
+        case 1:
 			_order_list[no - 1].makeArchival();
 			break;
-		case '2':
+        case 2:
 			break;
+        default:
+            throw std::invalid_argument("getUserOptionChoice - niepoprawna wartosc argumentu");
 		}
+
 		system("cls");
 		showOrderList();
 		break;
-	case '2':
+    case 2:
 		orderMenuOperations();
 		break;
+    default:
+        throw std::invalid_argument("getUserOptionChoice - niepoprawna wartosc argumentu");
 	}
 }
 
@@ -353,27 +338,22 @@ void Program::showOrderList()
 }
 
 void Program::findProductMenuOperations(Product*product)
-{
+{   
 	userInterface.findProductMenu();
 
-	char c;
-	do
+    switch (getUserOptionChoice(3))
 	{
-		c = _getch();
-	} while (c != '1'&& c != '2' && c != '3');
-
-
-	switch (c)
-	{
-	case '1':
+    case 1:
 		editProduct(product);
 		break;
-	case '2':
+    case 2:
 		findProduct();
 		break;
-	case '3':
+    case 3:
 		productMenuOperations();
 		break;
+    default:
+        throw std::invalid_argument("getUserOptionChoice - niepoprawna wartosc argumentu");
 	}
 }
 
@@ -430,7 +410,39 @@ void Program::editProduct(Product *product)
 			break;
 		}
 
-	} while (c != '4');
+    } while (c != '4');
+}
+
+int Program::getUserOptionChoice(int optionsNumber) const
+{
+    if (optionsNumber < 1)
+        return -1;
+
+    char input;
+    const char baseOption = '1';
+    bool isInputValid = false;
+
+    while (!isInputValid)
+    {
+        input = _getch();
+
+        for (int i = 0; i < optionsNumber; ++i)
+        {
+            if (input == baseOption + i)
+            {
+                isInputValid = true;
+            }
+        }
+    }
+
+    // lambda, która zamienia char na int
+    // moglbym napisac:
+    // return input - '0';
+    // ale wtedy nie od razu wiadomo o co chodzi. a tak nazwa funkcji mowi co sie dzieje
+    // i użylem lambdy, bo nie ma sensu tworzyć zwykłej funkcji, żeby użyć jej tylko w jednym miejscu
+    auto charToInt = [](char value) ->int { return (value - '0'); };
+
+    return charToInt(input);
 }
 
 ///INTERFACE
